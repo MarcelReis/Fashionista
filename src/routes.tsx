@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Product from "./pages/Product";
 import NotFound from "./pages/NotFound";
 
-const Routes = (): JSX.Element => {
+const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
