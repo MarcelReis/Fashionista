@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -16,20 +17,28 @@ func SearchProduct(search string, products []Product) []Product {
 func filter(products []Product, shouldAdd func(Product, string) bool, search string) []Product {
 	filteredProducts := make([]Product, 0)
 
-	for _, product := range products {
-		if shouldAdd(product, search) {
-			filteredProducts = append(filteredProducts, product)
+	stringID := strings.Split(search, "_")
+	ID, err := strconv.Atoi(stringID[0])
+	if err == nil {
+		for _, product := range products {
+			if findByID(product.Style, stringID[0]) {
+				filteredProducts = append(filteredProducts, product)
+			}
+		}
+
+	} else {
+		for _, product := range products {
+			if findByName(product.Name, search) {
+				filteredProducts = append(filteredProducts, product)
+			}
 		}
 	}
 
 	return filteredProducts
 }
 
-func shouldAdd(product Product, search string) bool {
-	if findByName(product.Name, search) || findByID(product.Style, search) {
-		return true
-	}
-	return false
+func findByID(id string, search string) bool {
+	return id == search
 }
 
 func findByName(name string, search string) bool {
@@ -39,17 +48,12 @@ func findByName(name string, search string) bool {
 }
 
 func isMn(r rune) bool {
-	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
+	return unicode.Is(unicode.Mn, r)
 }
 
 func removeDiacrits(value string) string {
 	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
 	result, _, _ := transform.String(t, value)
+
 	return result
-}
-
-func findByID(id string, search string) bool {
-	stylesParams := strings.Split(search, "_")
-
-	return id == stylesParams[0]
 }
