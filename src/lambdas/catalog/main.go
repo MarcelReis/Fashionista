@@ -18,7 +18,7 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	search := req.QueryStringParameters["search"]
 	log.Printf(search)
 	if len(search) > 0 {
-		products = SearchProduct(search, products)
+		products = SearchProduct(products, search)
 	}
 
 	res, err := json.Marshal(products)

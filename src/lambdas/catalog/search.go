@@ -10,31 +10,30 @@ import (
 )
 
 // SearchProduct ...
-func SearchProduct(search string, products []Product) []Product {
-	return filter(products, shouldAdd, strings.ToLower(search))
-}
-
-func filter(products []Product, shouldAdd func(Product, string) bool, search string) []Product {
-	filteredProducts := make([]Product, 0)
+func SearchProduct(products []Product, search string) []Product {
+	fProducts := make([]Product, 0)
 
 	stringID := strings.Split(search, "_")
-	ID, err := strconv.Atoi(stringID[0])
+	_, err := strconv.Atoi(stringID[0])
 	if err == nil {
 		for _, product := range products {
 			if findByID(product.Style, stringID[0]) {
-				filteredProducts = append(filteredProducts, product)
+				fProducts = append(fProducts, product)
 			}
+		}
+		if len(fProducts) > 1 && fProducts[0].ColorSlug != search {
+			fProducts[0], fProducts[1] = fProducts[1], fProducts[0]
 		}
 
 	} else {
 		for _, product := range products {
 			if findByName(product.Name, search) {
-				filteredProducts = append(filteredProducts, product)
+				fProducts = append(fProducts, product)
 			}
 		}
 	}
 
-	return filteredProducts
+	return fProducts
 }
 
 func findByID(id string, search string) bool {
