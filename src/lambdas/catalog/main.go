@@ -17,7 +17,8 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		"access-control-allow-origin": "*"}
 
 	log.Printf("Processing Lambda request %s\n", request.RequestContext.RequestID)
-	log.Printf("TESTING: %s", request.QueryStringParameters["search"])
+	search := request.QueryStringParameters["search"]
+	log.Printf("TESTING: %s", search)
 
 	if len(request.QueryStringParameters["search"]) > 0 {
 		products = SearchProduct(request.QueryStringParameters["search"], products)
