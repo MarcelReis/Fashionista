@@ -2,13 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	products := GetProducts()
 
 	headers := map[string]string{
@@ -16,12 +15,9 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		"cache-control":               "public, max-age=3600",
 		"access-control-allow-origin": "*"}
 
-	log.Printf("Processing Lambda request %s\n", request.RequestContext.RequestID)
-	search := request.QueryStringParameters["search"]
-	log.Printf("TESTING: %s", search)
-
-	if len(request.QueryStringParameters["search"]) > 0 {
-		products = SearchProduct(request.QueryStringParameters["search"], products)
+	search := req.QueryStringParameters["search"]
+	if len(search) > 0 {
+		products = SearchProduct(req.QueryStringParameters["search"], products)
 	}
 
 	res, err := json.Marshal(products)
