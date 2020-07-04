@@ -13,7 +13,6 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 
 	headers := map[string]string{
 		"content-type":                "application/json; charset=utf-8",
-		"cache-control":               "public, max-age=3600",
 		"access-control-allow-origin": "*"}
 
 	search := req.QueryStringParameters["search"]
