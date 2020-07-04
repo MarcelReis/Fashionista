@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -16,8 +17,9 @@ func handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 		"access-control-allow-origin": "*"}
 
 	search := req.QueryStringParameters["search"]
+	log.Printf(search)
 	if len(search) > 0 {
-		products = SearchProduct(req.QueryStringParameters["search"], products)
+		products = SearchProduct(search, products)
 	}
 
 	res, err := json.Marshal(products)
